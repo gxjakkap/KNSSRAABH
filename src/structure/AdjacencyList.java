@@ -6,10 +6,10 @@ import java.util.Map;
 
 public abstract class AdjacencyList {
     protected int verticesCount;
-    protected Map<String, List<Edge>> list;
+    protected Map<Node, List<Edge>> list;
 
     public AdjacencyList(int verticesCount){
-        this.list = new HashMap<String, List<Edge>>();
+        this.list = new HashMap<Node, List<Edge>>();
         this.verticesCount = verticesCount;
     }
 }
