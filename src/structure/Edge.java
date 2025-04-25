@@ -1,16 +1,19 @@
 package structure;
 
 public abstract class Edge {
-    private String dest;
+    private Node dest;
     private int weight;
-    private Object data;
 
-    public Edge(String dest, int weight){
+    public Edge(Node dest, int weight){
         this.dest = dest;
-        this.data = new Object();
+        this.weight = weight;
     }
 
-    public Object getData(){
-        return this.data;
+    public Node getDest(){
+        return this.dest;
+    }
+
+    public int getWeight(){
+        return this.weight;
     }
 }

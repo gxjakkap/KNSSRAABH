@@ -1,10 +1,10 @@
 import java.sql.*;
 
-public class DatabaseService {
+public class DatabaseInstance {
     private Connection conn = null;
     private Statement stmt = null;
 
-    public DatabaseService(){
+    public DatabaseInstance(){
         try {
             String dbFileName = "data.db";
             this.conn = DriverManager.getConnection("jdbc:sqlite:"+ dbFileName);
