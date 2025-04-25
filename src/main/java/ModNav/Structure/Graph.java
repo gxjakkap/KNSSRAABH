@@ -1,7 +1,7 @@
-package Structure;
+package ModNav.Structure;
 
-import ModNavExceptions.KeyAlreadyExistedException;
-import ModNavExceptions.KeyDoesNotExistException;
+import ModNav.ModNavExceptions.KeyAlreadyExistedException;
+import ModNav.ModNavExceptions.KeyDoesNotExistException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

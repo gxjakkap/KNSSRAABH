@@ -1,4 +1,4 @@
-package ModNavUtils;
+package ModNav.ModNavUtils;
 
 import java.sql.*;
 
@@ -14,7 +14,16 @@ public class DatabaseInstance {
 
             if (!FileUtil.checkFileExistence(dbFileName)){
                 // TODO: Table creation statement
-                // this.stmt.execute("CREATE TABLE ")
+//                this.stmt.execute("CREATE TABLE graph (" +
+//                        "" +
+//                        ")"
+//                );
+
+                this.stmt.execute("CREATE TABLE place (" +
+                        "id varchar(10) PRIMARY KEY" +
+                        "" +
+                        ")"
+                );
             }
         }
         catch (SQLException e) {

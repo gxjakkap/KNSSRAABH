@@ -1,4 +1,4 @@
-package Structure;
+package ModNav.Structure;
 
 public abstract class Node {
     protected String id;

@@ -1,4 +1,4 @@
-package Structure;
+package ModNav.Structure;
 
 import java.util.HashMap;
 import java.util.List;

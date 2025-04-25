@@ -1,4 +1,4 @@
-package Structure;
+package ModNav.Structure;
 
 public abstract class Edge {
     private Node dest;

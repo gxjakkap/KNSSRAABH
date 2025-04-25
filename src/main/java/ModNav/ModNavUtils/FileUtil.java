@@ -1,4 +1,4 @@
-package ModNavUtils;
+package ModNav.ModNavUtils;
 
 import java.io.File;
 
