@@ -1,3 +1,5 @@
+package ModNavUtils;
+
 import java.io.File;
 
 public class FileUtil {

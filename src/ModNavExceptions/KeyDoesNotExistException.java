@@ -1,4 +1,4 @@
-package modnaverrors;
+package ModNavExceptions;
 
 public class KeyDoesNotExistException extends IllegalArgumentException {
     public KeyDoesNotExistException(String message) {

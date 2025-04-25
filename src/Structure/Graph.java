@@ -1,7 +1,7 @@
-package structure;
+package Structure;
 
-import modnaverrors.KeyAlreadyExistedException;
-import modnaverrors.KeyDoesNotExistException;
+import ModNavExceptions.KeyAlreadyExistedException;
+import ModNavExceptions.KeyDoesNotExistException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,20 +15,23 @@ public class Graph extends AdjacencyList {
         this.nodeMap = new HashMap<String, Node>();
     }
 
+    public Graph(){
+        this.nodeMap = new HashMap<String, Node>();
+    }
+
     public void addVertex(Node n){
         if (this.list.containsKey(n)){
             throw new KeyAlreadyExistedException();
         }
-
         this.list.put(n, new ArrayList<>());
         this.nodeMap.put(n.id, n);
+        this.verticesCount = this.verticesCount + 1;
     }
 
     public void removeVertex(Node n){
         if (!this.list.containsKey(n)){
             throw new KeyDoesNotExistException();
         }
-
         this.list.remove(n);
         this.nodeMap.remove(n.id);
     }
@@ -37,7 +40,6 @@ public class Graph extends AdjacencyList {
         if (!this.nodeMap.containsKey(id)){
             return null;
         }
-
         return this.nodeMap.get(id);
     }
 }

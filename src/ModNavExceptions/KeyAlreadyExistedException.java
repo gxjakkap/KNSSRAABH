@@ -1,4 +1,4 @@
-package modnaverrors;
+package ModNavExceptions;
 
 public class KeyAlreadyExistedException extends IllegalArgumentException {
     public KeyAlreadyExistedException(String message) {

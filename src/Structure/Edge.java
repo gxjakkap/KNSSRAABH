@@ -1,4 +1,4 @@
-package structure;
+package Structure;
 
 public abstract class Edge {
     private Node dest;

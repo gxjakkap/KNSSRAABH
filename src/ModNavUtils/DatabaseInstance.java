@@ -1,3 +1,5 @@
+package ModNavUtils;
+
 import java.sql.*;
 
 public class DatabaseInstance {

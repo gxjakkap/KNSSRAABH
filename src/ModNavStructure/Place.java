@@ -1,6 +1,6 @@
-package modnavstructure;
+package ModNavStructure;
 
-import structure.Node;
+import Structure.Node;
 
 public class Place extends Node {
     public Place(String id){

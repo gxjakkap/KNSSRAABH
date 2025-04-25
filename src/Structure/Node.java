@@ -1,4 +1,4 @@
-package structure;
+package Structure;
 
 public abstract class Node {
     protected String id;
