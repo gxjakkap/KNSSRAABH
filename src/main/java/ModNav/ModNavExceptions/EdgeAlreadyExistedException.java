@@ -1,11 +1,11 @@
 package ModNav.ModNavExceptions;
 
-public class PathAlreadyExistedException extends IllegalArgumentException {
-    public PathAlreadyExistedException(String message) {
+public class EdgeAlreadyExistedException extends IllegalArgumentException {
+    public EdgeAlreadyExistedException(String message) {
         super(message);
     }
 
-    public PathAlreadyExistedException(){
+    public EdgeAlreadyExistedException(){
         super("Path already existed!");
     }
 }

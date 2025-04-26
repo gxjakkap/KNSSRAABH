@@ -2,7 +2,7 @@ package ModNav.Structure;
 
 import ModNav.ModNavExceptions.KeyAlreadyExistedException;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
-import ModNav.ModNavExceptions.PathAlreadyExistedException;
+import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class Graph extends AdjacencyList {
         });
 
         if (existed.get()){
-            throw new PathAlreadyExistedException();
+            throw new EdgeAlreadyExistedException();
         }
 
         Edge e = new Edge(dest, weight);
@@ -68,5 +68,9 @@ public class Graph extends AdjacencyList {
 
     public List<Edge> getAdjacencyList(Node target){
         return this.list.get(target);
+    }
+
+    public Map<Node, List<Edge>> getAdjacencyList(){
+        return this.list;
     }
 }
