@@ -1,6 +1,6 @@
 package ModNav.Structure;
 
-public abstract class Edge {
+public class Edge {
     private Node dest;
     private int weight;
 

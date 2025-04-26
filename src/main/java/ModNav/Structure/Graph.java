@@ -2,10 +2,13 @@ package ModNav.Structure;
 
 import ModNav.ModNavExceptions.KeyAlreadyExistedException;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
+import ModNav.ModNavExceptions.PathAlreadyExistedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Graph extends AdjacencyList {
     private Map<String, Node> nodeMap;
@@ -41,5 +44,29 @@ public class Graph extends AdjacencyList {
             return null;
         }
         return this.nodeMap.get(id);
+    }
+
+    public void addEdge(Node origin, Node dest, int weight){
+        if (!this.list.containsKey(origin)){
+            throw new KeyDoesNotExistException();
+        }
+        AtomicBoolean existed = new AtomicBoolean(false);
+        this.list.get(origin).forEach(e -> {
+            if (e.getDest().equals(dest)) {
+                existed.set(true);
+            }
+        });
+
+        if (existed.get()){
+            throw new PathAlreadyExistedException();
+        }
+
+        Edge e = new Edge(dest, weight);
+
+        this.list.get(origin).add(e);
+    }
+
+    public List<Edge> getAdjacencyList(Node target){
+        return this.list.get(target);
     }
 }
