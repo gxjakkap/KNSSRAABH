@@ -4,9 +4,14 @@ KNSSRAABH, Short for KMUTTNavigationSuperSmartRetroAncientAutomaticButHandtomati
 
 ## Run command
 
-The most simple way to run this is
+The most simple way to run this program is with gradle
 
+For UNIX:
 ```shell
-javac ./src/main/java/**/*.java -d "target/classes"
-java -classpath target/classes ModNav.Main
+./gradlew run -q
+```
+
+For Windows:
+```shell
+./gradlew.bat run -q
 ```
