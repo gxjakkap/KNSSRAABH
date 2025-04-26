@@ -1,4 +1,6 @@
 package ModNav.ModNavStructure.Algorithm;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Djikstra
     private Node Src;
     private Graph graph;
     private Map<Node, List<Edge>> AdjL;
+    Map<Node, Node> previous = new HashMap<>();
 
     public Djikstra(Node Src, Graph graph)
     {
@@ -44,6 +47,7 @@ public class Djikstra
                 if(Distance.get(u) + weight < Distance.get(V))
                 {
                     Distance.put(V, Distance.get(u) + weight);
+                    previous.put(V, u);
                     pq.add(new NodeDistance(V, Distance.get(V))); 
                 }
             }
@@ -51,6 +55,22 @@ public class Djikstra
 
         return Distance;
     }
+
+    public List<Node> getPath(Node Dest, Map<Node, Node> previous)
+    {
+        List<Node> path = new ArrayList<>();
+        Node current = Dest;
+
+        while(current != null)
+        {
+            path.add(current);
+            current = previous.get(current); //Back tracking
+        }
+
+        Collections.reverse(path);
+        return path;
+    }
+
 
     private Map<Node, Integer> setDist(Node src) 
     {
