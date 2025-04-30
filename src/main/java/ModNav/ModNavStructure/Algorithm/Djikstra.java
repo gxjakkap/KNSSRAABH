@@ -1,4 +1,5 @@
 package ModNav.ModNavStructure.Algorithm;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,47 +9,48 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import ModNav.Structure.Edge;
+import ModNav.ModNavStructure.ModNavGraph;
+import ModNav.ModNavStructure.Path;
+import ModNav.ModNavStructure.Place;
 import ModNav.Structure.Graph;
-import ModNav.Structure.Node;
 
 public class Djikstra
 {
-    private Node Src;
+    private Place Src;
     private Graph graph;
-    private Map<Node, List<Edge>> AdjL;
-    Map<Node, Node> previous = new HashMap<>();
+    private Map<Place, List<Path>> AdjL;
+    Map<Place, Place> previous = new HashMap<>();
 
-    public Djikstra(Node Src, Graph graph)
+    public Djikstra(Place Src, ModNavGraph graph)
     {
         this.Src = Src;
         this.graph = graph;
-        this.AdjL = graph.getAdjacencyList();
+        this.AdjL = graph.getAllPaths();
     }
 
-    public Map<Node, Integer> ShortestPath(Node src)
+    public Map<Place, Integer> ShortestPath(Place src)
     {
-        Map<Node, Integer> Distance = setDist(src);
-        PriorityQueue<NodeDistance> pq = new PriorityQueue<>();
-        pq.add(new NodeDistance(src, 0));
+        Map<Place, Integer> Distance = setDist(src);
+        PriorityQueue<NodeDistance<Place>> pq = new PriorityQueue<>();
+        pq.add(new NodeDistance<Place>(src, 0));
 
         while(!pq.isEmpty())
         {
-            NodeDistance current = pq.poll();
-            Node u = current.getNode();
+            NodeDistance<Place> current = pq.poll();
+            Place u = current.getNode();
 
             if(current.getDist() > Distance.get(u)) continue; //current path costs more than previous path
 
-            for(Edge edge : AdjL.getOrDefault(u, List.of()))
+            for(Path edge : AdjL.getOrDefault(u, List.of()))
             {
-                Node V = edge.getDest();
+                Place V = edge.getDest();
                 int weight = edge.getWeight();
 
                 if(Distance.get(u) + weight < Distance.get(V))
                 {
                     Distance.put(V, Distance.get(u) + weight); //update path cost
                     previous.put(V, u); //track path
-                    pq.add(new NodeDistance(V, Distance.get(V))); //go to the next node
+                    pq.add(new NodeDistance<Place>(V, Distance.get(V))); //go to the next node
                 }
             }
         }
@@ -56,10 +58,10 @@ public class Djikstra
         return Distance;
     }
 
-    public List<Node> getPath(Node Dest, Map<Node, Node> previous)
+    public List<Place> getPath(Place Dest, Map<Place, Place> previous)
     {
-        List<Node> path = new ArrayList<>();
-        Node current = Dest;
+        List<Place> path = new ArrayList<>();
+        Place current = Dest;
 
         while(current != null)
         {
@@ -72,22 +74,22 @@ public class Djikstra
     }
 
 
-    private Map<Node, Integer> setDist(Node src) 
+    private Map<Place, Integer> setDist(Place src)
     {
-        Map<Node, Integer> Distance = new HashMap<>();
-        Set<Node> places = new HashSet<>();
+        Map<Place, Integer> Distance = new HashMap<>();
+        Set<Place> places = new HashSet<>();
 
-        for (Node node : AdjL.keySet()) 
+        for (Place node : AdjL.keySet())
         {
             places.add(node);
 
-            for (Edge edge : AdjL.get(node)) 
+            for (Path edge : AdjL.get(node))
             {
                 places.add(edge.getDest());
             }
         }
 
-        for(Node node: places)
+        for(Place node: places)
         {
             Distance.put(node, Integer.MAX_VALUE);
         }

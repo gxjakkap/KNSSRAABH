@@ -2,18 +2,18 @@ package ModNav.ModNavStructure.Algorithm;
 
 import ModNav.Structure.Node;
 
-public class NodeDistance implements Comparable<NodeDistance>
+public class NodeDistance <N extends  Node> implements Comparable<NodeDistance<Node>>
 {
-    private Node node;
+    private N node;
     private int Distance;
 
-    public NodeDistance(Node node, int Distance)
+    public NodeDistance(N node, int Distance)
     {
         this.node = node;
         this.Distance = Distance;
     }
 
-    public Node getNode()
+    public N getNode()
     {
         return this.node;
     }
