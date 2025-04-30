@@ -28,4 +28,8 @@ public class Place extends Node {
     public void setNames(List<String> names){
         this.names = names;
     }
+
+    public String getPrimaryName(){
+        return this.names.getFirst();
+    }
 }
