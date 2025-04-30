@@ -37,7 +37,7 @@ public class Djikstra
             NodeDistance current = pq.poll();
             Node u = current.getNode();
 
-            if(current.getDist() > Distance.get(u)) continue;
+            if(current.getDist() > Distance.get(u)) continue; //current path costs more than previous path
 
             for(Edge edge : AdjL.getOrDefault(u, List.of()))
             {
@@ -46,9 +46,9 @@ public class Djikstra
 
                 if(Distance.get(u) + weight < Distance.get(V))
                 {
-                    Distance.put(V, Distance.get(u) + weight);
-                    previous.put(V, u);
-                    pq.add(new NodeDistance(V, Distance.get(V))); 
+                    Distance.put(V, Distance.get(u) + weight); //update path cost
+                    previous.put(V, u); //track path
+                    pq.add(new NodeDistance(V, Distance.get(V))); //go to the next node
                 }
             }
         }
