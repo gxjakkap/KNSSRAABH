@@ -1,15 +1,15 @@
 package ModNav.Structure;
 
-public class Edge {
-    private Node dest;
-    private int weight;
+public class Edge <N extends Node> {
+    protected N dest;
+    protected int weight;
 
-    public Edge(Node dest, int weight){
+    public Edge(N dest, int weight){
         this.dest = dest;
         this.weight = weight;
     }
 
-    public Node getDest(){
+    public N getDest(){
         return this.dest;
     }
 

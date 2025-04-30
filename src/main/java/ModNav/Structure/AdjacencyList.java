@@ -8,17 +8,17 @@ public abstract class AdjacencyList {
     protected int verticesCount;
     protected Map<Node, List<Edge>> list;
 
-    public AdjacencyList(int verticesCount){
+    public AdjacencyList(int verticesCount) {
         this.list = new HashMap<Node, List<Edge>>();
         this.verticesCount = verticesCount;
     }
 
-    public AdjacencyList(){
+    public AdjacencyList() {
         this.list = new HashMap<Node, List<Edge>>();
         this.verticesCount = 0;
     }
 
-    public int getVerticesCount(){
+    public int getVerticesCount() {
         return this.verticesCount;
     }
 }

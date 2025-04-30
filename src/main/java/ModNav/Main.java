@@ -1,8 +1,8 @@
 package ModNav;
 
+import ModNav.ModNavStructure.ModNavGraph;
 import ModNav.ModNavStructure.Path;
 import ModNav.ModNavStructure.Place;
-import ModNav.Structure.Graph;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,14 +13,17 @@ public class Main {
 
         System.out.printf("We're at %s", s4.getId());
 
-        Graph g = new Graph();
+        ModNavGraph g = new ModNavGraph();
 
-        g.addVertex(s4);
+        g.addPlace(s4);
 
         Place lg = new Place("LG");
 
-        g.addVertex(lg);
+        g.addPlace(lg);
 
-        Path s4ToLg = new Path();
+        g.addPath(s4, lg, 63);
+
+        System.out.printf("Distance from %s to %s is %s m.\n", s4.getId(), lg.getId(), g.getPathsFromPlace(lg));
+
     }
 }

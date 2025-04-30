@@ -19,6 +19,7 @@ public class Graph extends AdjacencyList {
     }
 
     public Graph(){
+        super();
         this.nodeMap = new HashMap<String, Node>();
     }
 
@@ -26,7 +27,7 @@ public class Graph extends AdjacencyList {
         if (this.list.containsKey(n)){
             throw new KeyAlreadyExistedException();
         }
-        this.list.put(n, new ArrayList<>());
+        this.list.put(n, new ArrayList<Edge>());
         this.nodeMap.put(n.id, n);
         this.verticesCount = this.verticesCount + 1;
     }
@@ -50,8 +51,9 @@ public class Graph extends AdjacencyList {
         if (!this.list.containsKey(origin)){
             throw new KeyDoesNotExistException();
         }
+        List<Edge> edges = this.list.get(origin);
         AtomicBoolean existed = new AtomicBoolean(false);
-        this.list.get(origin).forEach(e -> {
+        edges.forEach(e -> {
             if (e.getDest().equals(dest)) {
                 existed.set(true);
             }
@@ -62,8 +64,7 @@ public class Graph extends AdjacencyList {
         }
 
         Edge e = new Edge(dest, weight);
-
-        this.list.get(origin).add(e);
+        edges.add(e);
     }
 
     public List<Edge> getAdjacencyList(Node target){
