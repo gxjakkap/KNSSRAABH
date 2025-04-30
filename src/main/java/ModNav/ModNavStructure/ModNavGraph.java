@@ -1,10 +1,8 @@
 package ModNav.ModNavStructure;
 
-import ModNav.Structure.Edge;
 import ModNav.Structure.Graph;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
-import ModNav.Structure.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,21 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ModNavGraph extends Graph {
-    private Map<String, Place> placeMap;
+public class ModNavGraph extends Graph<Place, Path> {
 
     public ModNavGraph(int verticesCount) {
         super(verticesCount);
-        this.placeMap = new HashMap<>();
     }
 
     public ModNavGraph() {
         super();
-        this.placeMap = new HashMap<>();
     }
 
     public Place getPlaceById(String id) {
-        return (Place) super.getNodeById(id);
+        return super.getNodeById(id);
     }
 
     public void addPlace(Place place) {
@@ -58,9 +53,9 @@ public class ModNavGraph extends Graph {
     }
 
     public List<Path> getPathsFromPlace(Place place) {
-        List<Edge> edges = super.getAdjacencyList(place);
+        List<Path> edges = super.getAdjacencyList(place);
         List<Path> paths = new ArrayList<>();
-        for (Edge edge : edges) {
+        for (Path edge : edges) {
             paths.add((Path) edge);
         }
         return paths;
@@ -68,21 +63,13 @@ public class ModNavGraph extends Graph {
 
     public Map<Place, List<Path>> getAllPaths() {
         Map<Place, List<Path>> pathMap = new HashMap<>();
-        Map<Node, List<Edge>> originalMap = super.getAdjacencyList();
+        Map<Place, List<Path>> originalMap = super.getAdjacencyList();
 
-        for (Map.Entry<Node, List<Edge>> entry : originalMap.entrySet()) {
-            Place place = (Place) entry.getKey();
-            List<Path> paths = new ArrayList<>();
-            for (Edge edge : entry.getValue()) {
-                paths.add((Path) edge);
-            }
+        for (Map.Entry<Place, List<Path>> entry : originalMap.entrySet()) {
+            Place place = entry.getKey();
+            List<Path> paths = new ArrayList<>(entry.getValue());
             pathMap.put(place, paths);
         }
         return pathMap;
-    }
-
-    public Path temp_getDirectPath(Place origin, Place dest) {
-        // Implement your logic here
-        return null;
     }
 }

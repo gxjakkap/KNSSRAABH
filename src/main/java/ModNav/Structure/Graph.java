@@ -10,29 +10,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Graph extends AdjacencyList {
-    private Map<String, Node> nodeMap;
+public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N, E> {
+    private Map<String, N> nodeMap;
 
     public Graph(int verticesCount){
         super(verticesCount);
-        this.nodeMap = new HashMap<String, Node>();
+        this.nodeMap = new HashMap<String, N>();
     }
 
     public Graph(){
         super();
-        this.nodeMap = new HashMap<String, Node>();
+        this.nodeMap = new HashMap<String, N>();
     }
 
-    public void addVertex(Node n){
+    public void addVertex(N n){
         if (this.list.containsKey(n)){
             throw new KeyAlreadyExistedException();
         }
-        this.list.put(n, new ArrayList<Edge>());
+        this.list.put(n, new ArrayList<E>());
         this.nodeMap.put(n.id, n);
         this.verticesCount = this.verticesCount + 1;
     }
 
-    public void removeVertex(Node n){
+    public void removeVertex(N n){
         if (!this.list.containsKey(n)){
             throw new KeyDoesNotExistException();
         }
@@ -40,18 +40,18 @@ public class Graph extends AdjacencyList {
         this.nodeMap.remove(n.id);
     }
 
-    public Node getNodeById(String id){
+    public N getNodeById(String id){
         if (!this.nodeMap.containsKey(id)){
             return null;
         }
         return this.nodeMap.get(id);
     }
 
-    public void addEdge(Node origin, Node dest, int weight){
+    public void addEdge(N origin, N dest, int weight){
         if (!this.list.containsKey(origin)){
             throw new KeyDoesNotExistException();
         }
-        List<Edge> edges = this.list.get(origin);
+        List<E> edges = this.list.get(origin);
         AtomicBoolean existed = new AtomicBoolean(false);
         edges.forEach(e -> {
             if (e.getDest().equals(dest)) {
@@ -63,15 +63,15 @@ public class Graph extends AdjacencyList {
             throw new EdgeAlreadyExistedException();
         }
 
-        Edge e = new Edge(dest, weight);
-        edges.add(e);
+        Edge<N> e = new Edge<N>(dest, weight);
+        edges.add((E) e);
     }
 
-    public List<Edge> getAdjacencyList(Node target){
+    public List<E> getAdjacencyList(N target){
         return this.list.get(target);
     }
 
-    public Map<Node, List<Edge>> getAdjacencyList(){
+    public Map<N, List<E>> getAdjacencyList(){
         return this.list;
     }
 }

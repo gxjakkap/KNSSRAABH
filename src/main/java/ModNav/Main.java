@@ -1,7 +1,6 @@
 package ModNav;
 
 import ModNav.ModNavStructure.ModNavGraph;
-import ModNav.ModNavStructure.Path;
 import ModNav.ModNavStructure.Place;
 
 public class Main {
@@ -23,7 +22,7 @@ public class Main {
 
         g.addPath(s4, lg, 63);
 
-        System.out.printf("Distance from %s to %s is %s m.\n", s4.getId(), lg.getId(), g.getPathsFromPlace(lg));
+        System.out.printf("Distance from %s to %s is %s m.\n", s4.getId(), lg.getId(), g.getPathsFromPlace(s4));
 
     }
 }
