@@ -28,7 +28,7 @@ public class Traverse {
             for(Path i : graph.getAdjacencyList(current)){
                 if(!visited.containsKey(i.getDest()) || !visited.get(i.getDest())){
                     q.add(i.getDest());
-                    visited.put(current, true);
+                    visited.put(i.getDest(), true);
                 }
             }
         }
