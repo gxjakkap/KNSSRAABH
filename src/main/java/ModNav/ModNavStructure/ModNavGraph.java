@@ -48,8 +48,10 @@ public class ModNavGraph extends Graph<Place, Path> {
             throw new EdgeAlreadyExistedException();
         }
 
-        Path path = new Path(dest, distance);
-        this.list.get(origin).add(path);
+        Path originToDest = new Path(dest, distance);
+        Path destToOrigin = new Path(origin, distance); // undirected graph
+        this.list.get(origin).add(originToDest);
+        this.list.get(dest).add(destToOrigin);
     }
 
     public List<Path> getPathsFromPlace(Place place) {
