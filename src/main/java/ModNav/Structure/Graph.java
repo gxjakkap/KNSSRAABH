@@ -4,10 +4,7 @@ import ModNav.ModNavExceptions.KeyAlreadyExistedException;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N, E> {
@@ -40,11 +37,11 @@ public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N,
         this.nodeMap.remove(n.id);
     }
 
-    public N getNodeById(String id){
+    public Optional<N> getNodeById(String id){
         if (!this.nodeMap.containsKey(id)){
-            return null;
+            return Optional.empty();
         }
-        return this.nodeMap.get(id);
+        return Optional.ofNullable(this.nodeMap.get(id));
     }
 
     public void addEdge(N origin, N dest, int weight){

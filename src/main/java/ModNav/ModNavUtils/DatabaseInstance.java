@@ -1,5 +1,6 @@
 package ModNav.ModNavUtils;
 
+import ModNav.ModNavStructure.ModNavGraph;
 import ModNav.ModNavStructure.Path;
 import ModNav.ModNavStructure.Place;
 
@@ -19,7 +20,6 @@ public class DatabaseInstance {
             this.stmt = conn.createStatement();
 
             if (!FileUtil.checkFileExistence(dbFileName)){
-                // TODO: Table creation statement
                 this.stmt.execute("CREATE TABLE map (" +
                         "id VARCHAR(10) PRIMARY KEY," +
                         "names TEXT NOT NULL" +
@@ -60,30 +60,33 @@ public class DatabaseInstance {
         }
     }
 
-    public Map<Place, List<Path>> loadMapFromDB(){
-        Map<Place, List<Path>> m = new HashMap<>();
+    public DBQueryResult loadMapFromDB(){
+        DBQueryResult qRes = new DBQueryResult();
 
         try (ResultSet r = this.executeQuery("SELECT * FROM map;")) {
             while (r.next()){
-                String pId = r.getString("id");
-                Place p = new Place(pId);
-
-                List<String> names = JsonOperations.modNavNameListParse((r.getString("names")));
-                List<Path> pth = JsonOperations.modNavMapParse(r.getString("paths"));
-
-                p.setNames(names);
-
-                m.put(p, pth);
+                qRes.addRow(r.getString("id"), r.getString("paths"), r.getString("names"));
             }
         }
         catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return m;
+        return qRes;
     }
 
-    public void saveMapToDB(){
+    public void saveMapToDB(ModNavGraph g){
+        g.getAdjacencyList().forEach((n, e) -> {
+            try (ResultSet r = this.executeQuery("SELECT * FROM map WHERE id = " + n.getId() + ";")) {
+                String ps = JsonOperations.modNavPlaceArrayStringify(e);
+                if (!r.getString("paths").equals(ps)){  
+                    this.executeUpdate("UPDATE map SET paths = " + ps + ";");
+                }
+            }
+            catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
 
+        });
     }
 }

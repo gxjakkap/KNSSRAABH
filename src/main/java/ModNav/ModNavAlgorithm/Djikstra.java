@@ -16,15 +16,11 @@ import ModNav.Structure.Graph;
 
 public class Djikstra
 {
-    private Place Src;
-    private Graph graph;
     private Map<Place, List<Path>> AdjL;
     Map<Place, Place> previous = new HashMap<>();
 
-    public Djikstra(Place Src, ModNavGraph graph)
+    public Djikstra(ModNavGraph graph)
     {
-        this.Src = Src;
-        this.graph = graph;
         this.AdjL = graph.getAllPaths();
     }
 
@@ -99,5 +95,8 @@ public class Djikstra
         return Distance;
     }
 
+    public Map<Place, Place> getPrevious(){
+        return this.previous;
+    }
 
 }

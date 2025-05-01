@@ -4,10 +4,7 @@ import ModNav.Structure.Graph;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModNavGraph extends Graph<Place, Path> {
@@ -20,7 +17,7 @@ public class ModNavGraph extends Graph<Place, Path> {
         super();
     }
 
-    public Place getPlaceById(String id) {
+    public Optional<Place> getPlaceById(String id) {
         return super.getNodeById(id);
     }
 

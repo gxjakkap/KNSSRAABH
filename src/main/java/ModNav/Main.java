@@ -1,28 +1,39 @@
 package ModNav;
 
+import ModNav.ModNavMainFunctions.SearchByBID;
 import ModNav.ModNavStructure.ModNavGraph;
-import ModNav.ModNavStructure.Place;
+import ModNav.ModNavUtils.UserInputs;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         //hi
-        System.out.println("Hello World!");
 
-        Place s4 = new Place("S4");
-
-        System.out.printf("We're at %s", s4.getId());
-
+        // Initiate
         ModNavGraph g = new ModNavGraph();
 
-        g.addPlace(s4);
+        // Main loop
+        Scanner sc = new Scanner(System.in);
 
-        Place lg = new Place("LG");
+        System.out.println("Welcome to KMUTTNavigationSuperSmartRetroAncientAutomaticButHandtomatic");
+        System.out.println("(Or KNSSRAABH for short.)");
 
-        g.addPlace(lg);
+        System.out.println("================== Main Menu ==================");
+        System.out.print("[1] Search with BID\t\t\t[2] Search with name\n");
+        System.out.print("[3] Add new place\t\t\t[4] Add new path\n");
 
-        g.addPath(s4, lg, 63);
+        int opts = UserInputs.getIntegerInput(sc, 1, 4,"> Option: ");
 
-        System.out.printf("Distance from %s to %s is %s m.\n", s4.getId(), lg.getId(), g.getPathsFromPlace(s4));
+        switch (opts){
+            case 1:
+                SearchByBID.initiate(sc, g);
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
 
     }
 }
