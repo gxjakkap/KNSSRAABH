@@ -1,4 +1,4 @@
-package ModNav.ModNavStructure.Algorithm;
+package ModNav.ModNavAlgorithm;
 
 import ModNav.Structure.Node;
 

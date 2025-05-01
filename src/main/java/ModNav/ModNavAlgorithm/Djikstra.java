@@ -1,4 +1,4 @@
-package ModNav.ModNavStructure.Algorithm;
+package ModNav.ModNavAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
