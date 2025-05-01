@@ -69,6 +69,17 @@ public class Djikstra
         return path;
     }
 
+    public int printPath(Place src, Place Dest)
+    {
+        Map<Place, Integer> weightMap = this.ShortestPath(src);
+        List<Place> Path = getPath(Dest, this.previous);
+        for(Place i : Path)
+        {
+            System.out.print(i.getPrimaryName() + "");
+        }
+        return weightMap.get(Dest);
+    }
+
 
     private Map<Place, Integer> setDist(Place src)
     {
