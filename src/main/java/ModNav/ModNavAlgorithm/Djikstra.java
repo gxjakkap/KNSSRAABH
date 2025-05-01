@@ -69,15 +69,18 @@ public class Djikstra
         return path;
     }
 
-    public int printPath(Place src, Place Dest)
+    public void printPath(Place src, Place Dest)
     {
-        Map<Place, Integer> weightMap = this.ShortestPath(src);
         List<Place> Path = getPath(Dest, this.previous);
         for(Place i : Path)
         {
-            System.out.print(i.getPrimaryName() + "");
+            System.out.print(i.getPrimaryName() + " ");
         }
-        return weightMap.get(Dest);
+    }
+
+    public int getWeight(Map<Place, Integer> weightMap, Place dest)
+    {
+        return weightMap.get(dest);
     }
 
 
