@@ -32,4 +32,8 @@ public class Place extends Node {
     public String getPrimaryName(){
         return this.names.getFirst();
     }
+
+    public List<String> getNames(){
+        return this.names;
+    }
 }

@@ -1,7 +1,8 @@
 package ModNav;
 
-import ModNav.ModNavMainFunctions.SearchByBID;
+import ModNav.ModNavMainFunctions.MainMenuFunctions;
 import ModNav.ModNavStructure.ModNavGraph;
+import ModNav.ModNavUtils.DatabaseInstance;
 import ModNav.ModNavUtils.UserInputs;
 
 import java.util.Scanner;
@@ -11,6 +12,7 @@ public class Main {
         //hi
 
         // Initiate
+        DatabaseInstance db = new DatabaseInstance();
         ModNavGraph g = new ModNavGraph();
 
         // Main loop
@@ -27,9 +29,15 @@ public class Main {
 
         switch (opts){
             case 1:
-                SearchByBID.initiate(sc, g);
+                MainMenuFunctions.searchByBID(sc, g);
                 break;
             case 2:
+                break;
+            case 3:
+                MainMenuFunctions.addNewPlace(sc, g);
+                break;
+            case 4:
+                MainMenuFunctions.addPath(sc, g);
                 break;
             default:
                 break;

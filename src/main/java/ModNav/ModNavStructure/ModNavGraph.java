@@ -71,4 +71,24 @@ public class ModNavGraph extends Graph<Place, Path> {
         }
         return pathMap;
     }
+
+    public Optional<Place> findPlaceWithName(String name){
+        StringBuilder sb = new StringBuilder();
+        AtomicBoolean found = new AtomicBoolean(false);
+
+        for (Place p : this.nodeMap.values()){
+            for (String n : p.getNames()){
+                if (n.equalsIgnoreCase(name)){
+                    sb.append(p.getId());
+                    found.set(true);
+                    break;
+                }
+            }
+            if (found.get()) break;
+        }
+
+        String id = sb.toString();
+
+        return this.getPlaceById(id);
+    }
 }

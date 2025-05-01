@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N, E> {
-    private Map<String, N> nodeMap;
+    protected Map<String, N> nodeMap;
 
     public Graph(int verticesCount){
         super(verticesCount);
@@ -38,7 +38,7 @@ public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N,
     }
 
     public Optional<N> getNodeById(String id){
-        if (!this.nodeMap.containsKey(id)){
+        if (!this.nodeMap.containsKey(id.toUpperCase())){
             return Optional.empty();
         }
         return Optional.ofNullable(this.nodeMap.get(id));

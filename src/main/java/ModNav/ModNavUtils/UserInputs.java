@@ -15,8 +15,28 @@ public class UserInputs {
         return inp;
     }
 
-    public static int getIntegerInput(Scanner sc, int min, int max,  String prefix){
+    public static int getIntegerInput(Scanner sc, int min, int max, String prefix){
         System.out.print(prefix);
         return getIntegerInput(sc, min, max);
+    }
+
+    public static String getLineInput(Scanner sc){
+        return sc.nextLine();
+    }
+
+    public static String getLineInput(Scanner sc, String prefix){
+        System.out.print(prefix);
+        return getLineInput(sc);
+    }
+
+    public static boolean getYesNoAnswer(Scanner sc, boolean yesAsDefault){
+        String inp = sc.nextLine();
+
+        return !(inp.equalsIgnoreCase(yesAsDefault ? "n" : "y"));
+    }
+
+    public static boolean getYesNoAnswer(Scanner sc, boolean yesAsDefault, String prefix){
+        System.out.print(prefix);
+        return getYesNoAnswer(sc, yesAsDefault);
     }
 }
