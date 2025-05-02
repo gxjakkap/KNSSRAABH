@@ -34,7 +34,7 @@ public class Directions {
 
         System.out.printf("Shortest path to %s from %s is: ", dest.getPrimaryName(), og.getPrimaryName());
         d.printPath(og, dest);
-        System.out.printf(" (%d m)", d.getWeight(wm, dest));
+        System.out.printf(" (%d m)\n", d.getWeight(wm, dest));
     }
 
     public static String promptForPlaceID(Scanner sc){

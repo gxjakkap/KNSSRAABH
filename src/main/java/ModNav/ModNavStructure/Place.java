@@ -12,7 +12,6 @@ public class Place extends Node {
     public Place(String id){
         super(id);
         this.names = new ArrayList<>();
-        this.names.add(id);
     }
 
     public Place(String id, String[] names){
@@ -30,6 +29,7 @@ public class Place extends Node {
     }
 
     public String getPrimaryName(){
+        if (this.names.isEmpty()) return this.id;
         return this.names.getFirst();
     }
 
