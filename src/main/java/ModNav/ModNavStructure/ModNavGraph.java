@@ -91,4 +91,16 @@ public class ModNavGraph extends Graph<Place, Path> {
 
         return this.getPlaceById(id);
     }
+
+    public void setPlaceMap(Map<String, Place> mp){
+        this.nodeMap = mp;
+    }
+
+    public void setList(Map<Place, List<Path>> l){
+        this.list = l;
+    }
+
+    public Map<String, Place> getPlaceMap(){
+        return this.nodeMap;
+    }
 }

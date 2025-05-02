@@ -6,13 +6,15 @@ import java.util.Scanner;
 
 public class UserInputs {
     public static int getIntegerInput(Scanner sc, int min, int max){
-        int inp = sc.nextInt();
+        String inp = sc.nextLine().trim();
 
-        if (inp < min || inp > max){
-            throw new InputOutOfRangeException("Input " + String.valueOf(inp) + " is out of range");
+        int pinp = Integer.parseInt(inp);
+
+        if (pinp < min || pinp > max){
+            throw new InputOutOfRangeException("Input " + inp + " is out of range");
         }
 
-        return inp;
+        return pinp;
     }
 
     public static int getIntegerInput(Scanner sc, int min, int max, String prefix){
