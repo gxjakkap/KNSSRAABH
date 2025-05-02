@@ -1,10 +1,10 @@
 package ModNav.ModNavStructure;
 
-import ModNav.Structure.Node;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ModNav.Structure.Node;
 
 public class Place extends Node {
     private List<String> names;
@@ -18,6 +18,22 @@ public class Place extends Node {
         super(id);
         this.names = new ArrayList<>();
         this.names.addAll(Arrays.asList(names));
+    }
+
+    @Override
+    public boolean equals(Object o) 
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Place place = (Place) o;
+        return this.id.equals(place.id);
+    }
+
+    @Override
+    public int hashCode() 
+    {
+        return this.id.hashCode();
     }
 
     public void addName(String name){
