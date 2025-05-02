@@ -8,10 +8,10 @@ The most simple way to run this program is with gradle
 
 For UNIX:
 ```shell
-./gradlew run -q
+./gradlew run --console=plain -q
 ```
 
 For Windows:
 ```shell
-./gradlew.bat run -q
+./gradlew.bat run --console=plain -q
 ```
