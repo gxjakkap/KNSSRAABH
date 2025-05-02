@@ -80,7 +80,15 @@ public class Djikstra
 
     public int getWeight(Map<Place, Integer> weightMap, Place dest)
     {
-        return weightMap.get(dest);
+        Integer weight = weightMap.get(dest);
+        if(weight == null || weight == Integer.MAX_VALUE)
+        {
+            return -1;
+        }
+        else
+        {
+            return weight.intValue();
+        }
     }
 
 
