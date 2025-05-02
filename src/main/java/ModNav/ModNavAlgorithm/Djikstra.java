@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ModNav.ModNavStructure.ModNavGraph;
 import ModNav.ModNavStructure.Path;
 import ModNav.ModNavStructure.Place;
-import ModNav.Structure.Graph;
 
 public class Djikstra
 {
@@ -69,12 +69,20 @@ public class Djikstra
         return path;
     }
 
-    public void printPath(Place src, Place Dest)
+    public void printPath(Place Dest)
     {
         List<Place> Path = getPath(Dest, this.previous);
-        for(Place i : Path)
-        {
-            System.out.print(i.getPrimaryName() + " ");
+        String result = Path.stream()
+            .map(Place::getId)
+            .collect(Collectors.joining(" > "));
+        System.out.print(result);
+    }
+
+    public void pathBreakdown(Place dest){
+        List<Place> path = getPath(dest, this.previous);
+        System.out.println("Path breakdown: ");
+        for (Place i : path){
+            System.out.printf("* [%s] %s\n", i.getId(), i.getPrimaryName());
         }
     }
 

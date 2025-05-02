@@ -1,6 +1,7 @@
 package ModNav.ModNavMainFunctions;
 
 import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
+import ModNav.ModNavExceptions.InputOutOfRangeException;
 import ModNav.ModNavExceptions.KeyAlreadyExistedException;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavStructure.ModNavGraph;
@@ -35,7 +36,15 @@ public class MainMenuFunctions {
         System.out.print("[1] Get directions\t\t\t[2] Edit place info\n");
         System.out.print("[3] Delete place\t\t\t[4] Back to main menu\n");
 
-        int opts = UserInputs.getIntegerInput(sc, 1, 4, "> Option: ");
+        Integer opts = null;
+        while (opts == null){
+            try {
+                opts = UserInputs.getIntegerInput(sc, 1, 4, "> Option: ");
+            }
+            catch (NumberFormatException | InputOutOfRangeException e){
+                System.out.println("Invalid Option!");
+            }
+        }
         switch (opts){
             case 1:
                 Directions.printOutDirection(sc, g, p);

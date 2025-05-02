@@ -1,5 +1,6 @@
 package ModNav.ModNavMainFunctions;
 
+import ModNav.ModNavExceptions.InputOutOfRangeException;
 import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavStructure.ModNavGraph;
 import ModNav.ModNavStructure.Place;
@@ -12,11 +13,20 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class Directions {
-    public static void printOutDirection(Scanner sc, ModNavGraph g, Place dest){
+    public static void  printOutDirection(Scanner sc, ModNavGraph g, Place dest){
         System.out.printf("================== Destination: %s ==================\n", dest.getPrimaryName());
         System.out.print("[1] Select place with ID\t\t\t[2] Search place with names\n");
 
-        int opts = UserInputs.getIntegerInput(sc, 1, 2, "> Option: ");
+        Integer opts = null;
+
+        while (opts == null){
+            try {
+                opts = UserInputs.getIntegerInput(sc, 1, 2, "> Option: ");
+            }
+            catch (NumberFormatException | InputOutOfRangeException e){
+                System.out.println("Invalid Option!");
+            }
+        }
 
         Optional<Place> pog = (opts == 1) ? g.getPlaceById(promptForPlaceID(sc)) : g.findPlaceWithName(promptForName(sc));
 
@@ -32,9 +42,30 @@ public class Directions {
 
         List<Place> lp = d.getPath(dest, d.getPrevious());
 
-        System.out.printf("Shortest path to %s from %s is: ", dest.getPrimaryName(), og.getPrimaryName());
-        d.printPath(og, dest);
+        System.out.println("Path found!");
+        System.out.printf("Shortest path from %s to %s is:\n", og.getPrimaryName(), dest.getPrimaryName());
+        d.printPath(dest);
         System.out.printf(" (%d m)\n", d.getWeight(wm, dest));
+
+        System.out.print("================== Options ==================\n");
+        System.out.print("[1] View route breakdown\t\t\t[2] Back to main menu\n");
+
+        opts = null;
+        while (opts == null){
+            try {
+                opts = UserInputs.getIntegerInput(sc, 1, 4, "> Option: ");
+            }
+            catch (NumberFormatException | InputOutOfRangeException e){
+                System.out.println("Invalid Option!");
+            }
+        }
+        switch (opts){
+            case 1:
+                d.pathBreakdown(dest);
+                break;
+            default:
+                break;
+        }
     }
 
     public static String promptForPlaceID(Scanner sc){
