@@ -34,7 +34,12 @@ public class UserInputs {
     public static boolean getYesNoAnswer(Scanner sc, boolean yesAsDefault){
         String inp = sc.nextLine();
 
-        return !(inp.equalsIgnoreCase(yesAsDefault ? "n" : "y"));
+        if (yesAsDefault){
+            return !inp.equalsIgnoreCase("n");
+        }
+        else {
+            return inp.equalsIgnoreCase("y");
+        }
     }
 
     public static boolean getYesNoAnswer(Scanner sc, boolean yesAsDefault, String prefix){
