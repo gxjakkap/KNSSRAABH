@@ -8,13 +8,16 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModNavGraph extends Graph<Place, Path> {
+    private Map<String, String> subject;
 
     public ModNavGraph(int verticesCount) {
         super(verticesCount);
+        this.subject = new HashMap<>();
     }
 
     public ModNavGraph() {
         super();
+        this.subject = new HashMap<>();
     }
 
     public Optional<Place> getPlaceById(String id) {
@@ -101,6 +104,23 @@ public class ModNavGraph extends Graph<Place, Path> {
     }
 
     public Map<String, Place> getPlaceMap(){
-        return this.nodeMap;
+        return Collections.unmodifiableMap(this.nodeMap);
     }
+
+    public Optional<Place> getPlaceFromSubjectID(String sub){
+        if (!subject.containsKey(sub)){
+            return Optional.empty();
+        }
+
+        return this.getPlaceById(subject.get(sub));
+    }
+
+    public void setSubjectMap(Map<String, String> sm){
+        this.subject = sm;
+    }
+
+    public Map<String, String> getSubjectMap(){
+        return Collections.unmodifiableMap(this.subject);
+    }
+
 }

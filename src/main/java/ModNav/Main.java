@@ -21,21 +21,34 @@ public class Main {
         db.close();
 
         // Main loop
-        System.out.println("Welcome to KMUTTNavigationSuperSmartRetroAncientAutomaticButHandtomatic");
-        System.out.println("(Or KNSSRAABH for short.)");
+        System.out.println("""
+                
+                
+                  _  ___   _  _____ _____ _____                      ____  _    _\s
+                 | |/ / \\ | |/ ____/ ____|  __ \\     /\\        /\\   |  _ \\| |  | |
+                 | ' /|  \\| | (___| (___ | |__) |   /  \\      /  \\  | |_) | |__| |
+                 |  < | . ` |\\___ \\\\___ \\|  _  /   / /\\ \\    / /\\ \\ |  _ <|  __  |
+                 | . \\| |\\  |____) |___) | | \\ \\  / ____ \\  / ____ \\| |_) | |  | |
+                 |_|\\_\\_| \\_|_____/_____/|_|  \\_\\/_/    \\_\\/_/    \\_\\____/|_|  |_|
+                                                                                 \s
+                                                                                 \s
+                
+                """);
+        System.out.println("(KMUTTNavigationSuperSmartRetroAncientAutomaticButHandtomatic)");
         Scanner sc = new Scanner(System.in);
 
         do {
             System.out.println("================== Main Menu ==================");
             System.out.println("* Search");
             System.out.println("[1] Search with BID");
-            System.out.println("[2] Search with name\n");
+            System.out.println("[2] Search with name");
+            System.out.println("[3] Search with subject ID\n");
             System.out.println("* Add and Edit");
-            System.out.println("[3] Add new place");
-            System.out.println("[4] Add new path\n");
-            System.out.print("[5] Exit\n");
+            System.out.println("[4] Add new place");
+            System.out.println("[5] Add new path\n");
+            System.out.print("[6] Exit\n");
 
-            int opts = UserInputs.getIntegerInput(sc, 1, 5, "> Option: ");
+            int opts = UserInputs.getIntegerInput(sc, 1, 6, "> Option: ");
 
             if (opts == 1) {
                 MainMenuFunctions.searchByBID(sc, g);
@@ -43,13 +56,16 @@ public class Main {
             else if (opts == 2) {
                 MainMenuFunctions.searchByName(sc, g);
             }
-            else if (opts == 3) {
-                MainMenuFunctions.addNewPlace(sc, g);
+            else if (opts == 3){
+                MainMenuFunctions.searchBySubject(sc, g);
             }
             else if (opts == 4) {
-                MainMenuFunctions.addPath(sc, g);
+                MainMenuFunctions.addNewPlace(sc, g);
             }
             else if (opts == 5) {
+                MainMenuFunctions.addPath(sc, g);
+            }
+            else if (opts == 6) {
                 break;
             }
         }

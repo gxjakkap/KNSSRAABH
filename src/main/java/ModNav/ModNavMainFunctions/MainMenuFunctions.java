@@ -3,13 +3,11 @@ package ModNav.ModNavMainFunctions;
 import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
 import ModNav.ModNavExceptions.InputOutOfRangeException;
 import ModNav.ModNavExceptions.KeyAlreadyExistedException;
-import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavStructure.ModNavGraph;
 import ModNav.ModNavStructure.Place;
 import ModNav.ModNavUtils.ConsoleUtils;
 import ModNav.ModNavUtils.UserInputs;
 
-import java.io.Console;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -78,6 +76,31 @@ public class MainMenuFunctions {
 
         if (res.isEmpty()){
             System.out.printf("Place '%s' not found!\n", name);
+            return;
+        }
+
+        Place p = res.get();
+
+        placeFound(sc, g, p);
+    }
+
+    public static void searchBySubject(Scanner sc, ModNavGraph g){
+        ConsoleUtils.clearScreen();
+        System.out.println("================== Search by Subject Name ==================");
+        String sub = "";
+
+        while (sub.isBlank()){
+            sub = UserInputs.getLineInput(sc, "> Input Subject Name: ");
+
+            if (sub.isBlank()){
+                System.out.println("Invalid Subject!");
+            }
+        }
+
+        Optional<Place> res = g.getPlaceFromSubjectID(sub);
+
+        if (res.isEmpty()){
+            System.out.printf("Subject '%s' is not found in our record!\n", sub);
             return;
         }
 
