@@ -69,6 +69,41 @@ public class Djikstra
         return path;
     }
 
+    private Map<Place, Path> trackPath(List<Place> path, Map<Place, List<Path>> AdjL)
+    {
+        Map<Place, Path> pathAdjList = new HashMap<>();
+        for(int i = 0; i < path.size() - 1; i++)
+        {
+            Place current = path.get(i);
+            Place next = path.get(i+1);
+            
+            if(next != null && AdjL.containsKey(current))
+            {
+                    List<Path> allDest = AdjL.get(current);
+                    for(Path p : allDest)
+                    {
+                        if(p.getDest().equals(next))
+                        {
+                            pathAdjList.put(current, p);
+                            break;
+                        }
+                    }
+            }
+        }
+        return pathAdjList;
+    }
+
+    public List<Integer> getAllWeight(List<Place> path, Map<Place, List<Path>> AdjL) //call this when user select route breakdown
+    {
+        Map<Place, Path> paths = trackPath(path, AdjL);
+        List<Integer> allWeight = new ArrayList<>();
+        for(Path i : paths.values())
+        {
+            allWeight.add(i.getWeight());
+        }
+        return allWeight;
+    }
+
     public void printPath(Place Dest)
     {
         List<Place> Path = getPath(Dest, this.previous);
@@ -80,14 +115,22 @@ public class Djikstra
 
     public void pathBreakdown(Place dest){
         List<Place> path = getPath(dest, this.previous);
+        List<Integer> allWeight = getAllWeight(path, AdjL);
         Place start = path.removeFirst();
         path.removeLast();
         System.out.println("\nPath breakdown: ");
-        System.out.printf("\nStart: [%s] %s\n", start.getId(), start.getPrimaryName());
-        for (Place i : path){
-            System.out.printf("* [%s] %s\n", i.getId(), i.getPrimaryName());
+        System.out.printf("\nStart\n\n");
+        System.out.printf("* [%s] %s\n", start.getId(), start.getPrimaryName());
+        for (int i = 0; i < path.size(); i++)
+        {
+            Place current = path.get(i);
+            Integer currWeight = allWeight.get(i);
+            System.out.printf("|\n|[%d m]\n|\n", currWeight.intValue());
+            System.out.printf("* [%s] %s\n", current.getId(), current.getPrimaryName());
         }
-        System.out.printf("Destination: [%s] %s\n\n", dest.getId(), dest.getPrimaryName());
+        System.out.printf("|\n|[%d m]\n|\n", (allWeight.get(allWeight.size() - 1)).intValue());
+        System.out.printf("* [%s] %s\n\n", dest.getId(), dest.getPrimaryName());
+        System.out.print("End\n");
     }
 
     public int getWeight(Map<Place, Integer> weightMap, Place dest)
