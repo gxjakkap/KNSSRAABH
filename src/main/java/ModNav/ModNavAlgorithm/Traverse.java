@@ -8,7 +8,7 @@ import ModNav.ModNavStructure.Place;
 
 public class Traverse {
     
-    public String bfs(ModNavGraph graph, Place startNode){
+    public static String bfs(ModNavGraph graph, Place startNode){
         /* boolean[] visited = new boolean[graph.getVerticesCount()]; //check if visited */
         Map<Place, Boolean> visited = new HashMap<>();
         StringBuffer str = new StringBuffer(100);
@@ -33,7 +33,7 @@ public class Traverse {
         return str.toString();
     }
 
-    public ArrayList<Place> bfsList(ModNavGraph graph, Place startNode){
+    public static ArrayList<Place> bfsList(ModNavGraph graph, Place startNode){
         Map<Place, Boolean> visited = new HashMap<>();
         ArrayList<Place> l = new ArrayList<>();
         Queue<Place> q = new LinkedList<>(); //queue สำเร็จรูป

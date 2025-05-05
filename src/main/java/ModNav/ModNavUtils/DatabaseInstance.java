@@ -1,12 +1,14 @@
 package ModNav.ModNavUtils;
 
 import ModNav.ModNavStructure.ModNavGraph;
+import ModNav.ModNavStructure.ModNavSubject;
 import ModNav.ModNavStructure.Place;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class DatabaseInstance implements AutoCloseable {
     private Connection conn = null;
@@ -18,7 +20,7 @@ public class DatabaseInstance implements AutoCloseable {
             this.conn = DriverManager.getConnection("jdbc:sqlite:"+ dbFileName);
             this.stmt = conn.createStatement();
             this.stmt.execute("CREATE TABLE IF NOT EXISTS map ( id VARCHAR(10) PRIMARY KEY, names TEXT NOT NULL, paths TEXT NOT NULL);");
-            this.stmt.execute("CREATE TABLE IF NOT EXISTS subject ( id VARCHAR(10) PRIMARY KEY, bid TEXT NOT NULL);");
+            this.stmt.execute("CREATE TABLE IF NOT EXISTS subject ( id VARCHAR(10) PRIMARY KEY, bid TEXT NOT NULL, sn TEXT NOT NULL);");
         }
         catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -54,8 +56,8 @@ public class DatabaseInstance implements AutoCloseable {
         }
     }
 
-    public DBQueryResult loadMapFromDB(){
-        DBQueryResult qRes = new DBQueryResult();
+    public DBMapQueryResult loadMapFromDB(){
+        DBMapQueryResult qRes = new DBMapQueryResult();
         Map<String, Place> pm = new HashMap<>();
 
         try (ResultSet r = this.executeQuery("SELECT id, names FROM map;")){
@@ -83,6 +85,32 @@ public class DatabaseInstance implements AutoCloseable {
         return qRes;
     }
 
+    public DBSubjectQueryResult loadSubjectDataFromDB(ModNavGraph g){
+        DBSubjectQueryResult qRes = new DBSubjectQueryResult();
+        try (ResultSet r = this.executeQuery("SELECT * FROM subject;");) {
+            while (r.next()){
+                String sid = r.getString("id");
+                String bid = r.getString("bid");
+                String sn = r.getString("sn");
+
+                Optional<Place> p = g.getPlaceById(bid);
+
+                if (p.isEmpty()){
+                    throw new RuntimeException();
+                }
+
+                qRes.addRow(sid, sn, p.get());
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return qRes;
+    }
+
+    @Deprecated
     public void saveMapToDB(ModNavGraph g){
         g.getAdjacencyList().forEach((n, e) -> {
             try {
@@ -109,6 +137,7 @@ public class DatabaseInstance implements AutoCloseable {
                         String updateS = "UPDATE map SET paths = ? WHERE id = ?;";
                         PreparedStatement updp = conn.prepareStatement(updateS);
                         updp.setString(1, ps);
+                        updp.setString(1, ps);
                         updp.setString(2, n.getId());
 
                         updp.execute();
@@ -129,23 +158,25 @@ public class DatabaseInstance implements AutoCloseable {
             }
         });
 
-        g.getSubjectMap().forEach((sid, bid) -> {
+        g.getSubjectMap().forEach((sid, sub) -> {
             try {
                 ResultSet r = this.executeQuery("SELECT * FROM subject");
 
                 if (!r.next()){
-                    String insertS = "INSERT INTO subject (id, bid) VALUES (?, ?);";
+                    String insertS = "INSERT INTO subject (id, bid, sn) VALUES (?, ?, ?);";
                     PreparedStatement insp = conn.prepareStatement(insertS);
                     insp.setString(1, sid);
-                    insp.setString(2, bid);
+                    insp.setString(2, sub.getBuilding().getId());
+                    insp.setString(3, sub.getSubjectName());
                     insp.execute();
                 }
                 else {
-                    if (!r.getString("bid").equals(bid)){
-                        String updateS = "UPDATE subject SET bid = ? WHERE id = ?;";
+                    if (!r.getString("bid").equals(sub.getBuilding().getId())){
+                        String updateS = "UPDATE subject SET bid = ?, sn = ? WHERE id = ?;";
                         PreparedStatement updp = conn.prepareStatement(updateS);
-                        updp.setString(1, bid);
-                        updp.setString(2, sid);
+                        updp.setString(1, sub.getBuilding().getId());
+                        updp.setString(2, sub.getSubjectName());
+                        updp.setString(3, sid);
                         updp.execute();
                     }
                 }
@@ -189,7 +220,7 @@ public class DatabaseInstance implements AutoCloseable {
                 if (!r.getString("names").equals(nls)){
                     String updateS = "UPDATE map SET names = ? WHERE id = ?;";
                     PreparedStatement updp = conn.prepareStatement(updateS);
-                    updp.setString(1, ps);
+                    updp.setString(1, nls);
                     updp.setString(2, n.getId());
 
                     updp.execute();
@@ -213,7 +244,7 @@ public class DatabaseInstance implements AutoCloseable {
         }
     }
 
-    public void saveSubject(String sid, String bid){
+    public void saveSubject(String sid, ModNavSubject sub){
         try {
             String selS = "SELECT * FROM subject WHERE id = ?";
             PreparedStatement selPs = conn.prepareStatement(selS);
@@ -221,19 +252,33 @@ public class DatabaseInstance implements AutoCloseable {
 
             ResultSet r = selPs.executeQuery();
             if (!r.next()){
-                String insertS = "INSERT INTO subject (id, bid) VALUES (?, ?);";
+                String insertS = "INSERT INTO subject (id, bid, sn) VALUES (?, ?, ?);";
                 PreparedStatement insp = conn.prepareStatement(insertS);
                 insp.setString(1, sid);
-                insp.setString(2, bid);
+                insp.setString(2, sub.getBuilding().getId());
+                insp.setString(3, sub.getSubjectName());
                 insp.execute();
             }
-            else if (!r.getString("bid").equals(bid)){
-                String updateS = "UPDATE subject SET bid = ? WHERE id = ?;";
+            else if (!r.getString("bid").equals(sub.getBuilding().getId())){
+                String updateS = "UPDATE subject SET bid = ?, sn = ? WHERE id = ?;";
                 PreparedStatement updp = conn.prepareStatement(updateS);
-                updp.setString(1, bid);
-                updp.setString(2, sid);
+                updp.setString(1, sub.getBuilding().getId());
+                updp.setString(2, sub.getSubjectName());
+                updp.setString(3, sid);
                 updp.execute();
             }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeSubjectRow(String sub){
+        try {
+            String delS = "DELETE FROM subject WHERE id = ?;";
+            PreparedStatement delPs = conn.prepareStatement(delS);
+            delPs.setString(1, sub);
+            delPs.execute();
         }
         catch (SQLException e) {
             throw new RuntimeException(e);

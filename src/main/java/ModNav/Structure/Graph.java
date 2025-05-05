@@ -41,7 +41,7 @@ public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N,
         if (!this.nodeMap.containsKey(id.toUpperCase())){
             return Optional.empty();
         }
-        return Optional.ofNullable(this.nodeMap.get(id));
+        return Optional.ofNullable(this.nodeMap.get(id.toUpperCase()));
     }
 
     public void addEdge(N origin, N dest, int weight){

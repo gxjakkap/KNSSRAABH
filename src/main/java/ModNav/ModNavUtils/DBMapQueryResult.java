@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DBQueryResult {
+public class DBMapQueryResult {
     private Map<Place, List<Path>> map;
     private Map<String, Place> placeList;
 
-    public DBQueryResult(){
+    public DBMapQueryResult(){
         this.map = new HashMap<>();
         this.placeList = new HashMap<>();
     }

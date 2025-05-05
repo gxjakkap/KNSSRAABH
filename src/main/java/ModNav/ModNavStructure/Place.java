@@ -63,8 +63,4 @@ public class Place extends Node {
     public List<String> getNames(){
         return Collections.unmodifiableList(this.names);
     }
-
-    public void setNewID(String newID){
-        this.id = newID;
-    }
 }

@@ -7,7 +7,6 @@ import ModNav.ModNavStructure.Place;
 import ModNav.ModNavAlgorithm.Djikstra;
 import ModNav.ModNavUtils.UserInputs;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -40,7 +39,7 @@ public class Directions {
 
         Map<Place, Integer> wm = d.ShortestPath(og);
 
-        List<Place> lp = d.getPath(dest, d.getPrevious());
+        //List<Place> lp = d.getPath(dest, d.getPrevious());
 
         System.out.println("Path found!");
         System.out.printf("Shortest path from %s to %s is:\n", og.getPrimaryName(), dest.getPrimaryName());
@@ -53,18 +52,14 @@ public class Directions {
         opts = null;
         while (opts == null){
             try {
-                opts = UserInputs.getIntegerInput(sc, 1, 4, "> Option: ");
+                opts = UserInputs.getIntegerInput(sc, 1, 2, "> Option: ");
             }
             catch (NumberFormatException | InputOutOfRangeException e){
                 System.out.println("Invalid Option!");
             }
         }
-        switch (opts){
-            case 1:
-                d.pathBreakdown(dest);
-                break;
-            default:
-                break;
+        if (opts == 1) {
+            d.pathBreakdown(dest);
         }
     }
 

@@ -2,7 +2,8 @@ package ModNav;
 
 import ModNav.ModNavMainFunctions.MainMenuFunctions;
 import ModNav.ModNavStructure.ModNavGraph;
-import ModNav.ModNavUtils.DBQueryResult;
+import ModNav.ModNavUtils.DBMapQueryResult;
+import ModNav.ModNavUtils.DBSubjectQueryResult;
 import ModNav.ModNavUtils.DatabaseInstance;
 import ModNav.ModNavUtils.UserInputs;
 
@@ -13,11 +14,14 @@ public class Main {
         //hi
 
         // Initiate
+        System.out.println("Loading...");
         DatabaseInstance db = new DatabaseInstance();
         ModNavGraph g = new ModNavGraph();
-        DBQueryResult qRes = db.loadMapFromDB();
+        DBMapQueryResult qRes = db.loadMapFromDB();
         g.setPlaceMap(qRes.getPlaceList());
         g.setList(qRes.getMap());
+        DBSubjectQueryResult sqRes = db.loadSubjectDataFromDB(g);
+        g.setSubjectMap(sqRes.getSubjectMap());
         db.close();
 
         // Main loop
@@ -74,10 +78,10 @@ public class Main {
         sc.close();
 
         // Cleanup & Saving
-        System.out.println("Cleaning up...");
-        db = new DatabaseInstance();
-        db.saveMapToDB(g);
-        db.close();
+//        System.out.println("Cleaning up...");
+//        db = new DatabaseInstance();
+//        db.saveMapToDB(g);
+//        db.close();
         System.out.println("Goodbye!");
 
         System.exit(0);

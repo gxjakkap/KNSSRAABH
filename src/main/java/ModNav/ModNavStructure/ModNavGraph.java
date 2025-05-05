@@ -8,16 +8,16 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModNavGraph extends Graph<Place, Path> {
-    private Map<String, String> subject;
+    private Map<String, ModNavSubject> subjectMap;
 
     public ModNavGraph(int verticesCount) {
         super(verticesCount);
-        this.subject = new HashMap<>();
+        this.subjectMap = new HashMap<>();
     }
 
     public ModNavGraph() {
         super();
-        this.subject = new HashMap<>();
+        this.subjectMap = new HashMap<>();
     }
 
     public Optional<Place> getPlaceById(String id) {
@@ -56,11 +56,7 @@ public class ModNavGraph extends Graph<Place, Path> {
 
     public List<Path> getPathsFromPlace(Place place) {
         List<Path> edges = super.getAdjacencyList(place);
-        List<Path> paths = new ArrayList<>();
-        for (Path edge : edges) {
-            paths.add((Path) edge);
-        }
-        return paths;
+        return new ArrayList<>(edges);
     }
 
     public Map<Place, List<Path>> getAllPaths() {
@@ -108,19 +104,42 @@ public class ModNavGraph extends Graph<Place, Path> {
     }
 
     public Optional<Place> getPlaceFromSubjectID(String sub){
-        if (!subject.containsKey(sub)){
+        if (!subjectMap.containsKey(sub)){
             return Optional.empty();
         }
 
-        return this.getPlaceById(subject.get(sub));
+        return Optional.ofNullable(subjectMap.get(sub).getBuilding());
     }
 
-    public void setSubjectMap(Map<String, String> sm){
-        this.subject = sm;
+    public void setSubjectMap(Map<String, ModNavSubject> sm){
+        this.subjectMap = sm;
     }
 
-    public Map<String, String> getSubjectMap(){
-        return Collections.unmodifiableMap(this.subject);
+    public Map<String, ModNavSubject> getSubjectMap(){
+        return Collections.unmodifiableMap(this.subjectMap);
     }
 
+    public Optional<ModNavSubject> getSubjectData(String sub){
+        if (!this.subjectMap.containsKey(sub.toUpperCase())){
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(this.subjectMap.get(sub.toUpperCase()));
+    }
+
+    public void addSubject(ModNavSubject sub){
+        this.subjectMap.put(sub.getSubjectID(), sub);
+    }
+
+    public void removeSubject(String sid){
+        this.subjectMap.remove(sid);
+    }
+
+    public void removePath(Place origin, Place dest){
+        this.list.get(origin).forEach((pth) -> {
+            if (pth.getDest().equals(dest)){
+                this.list.get(origin).remove(pth);
+            }
+        });
+    }
 }

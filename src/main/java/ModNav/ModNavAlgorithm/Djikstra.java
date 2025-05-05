@@ -28,7 +28,7 @@ public class Djikstra
     {
         Map<Place, Integer> Distance = setDist(src);
         PriorityQueue<NodeDistance<Place>> pq = new PriorityQueue<>();
-        pq.add(new NodeDistance<Place>(src, 0));
+        pq.add(new NodeDistance<>(src, 0));
 
         while(!pq.isEmpty())
         {
@@ -46,7 +46,7 @@ public class Djikstra
                 {
                     Distance.put(V, Distance.get(u) + weight); //update path cost
                     previous.put(V, u); //track path
-                    pq.add(new NodeDistance<Place>(V, Distance.get(V))); //go to the next node
+                    pq.add(new NodeDistance<>(V, Distance.get(V))); //go to the next node
                 }
             }
         }
@@ -133,18 +133,18 @@ public class Djikstra
         }
         path.removeLast();
         System.out.println("\nPath breakdown: ");
-        System.out.printf("\nStart\n\n");
+        System.out.print("\nStart\n\n");
         System.out.printf("* [%s] %s\n", start.getId(), start.getPrimaryName());
         for (int i = 0; i < path.size(); i++)
         {
             Place current = path.get(i);
             Integer currWeight = allWeight.get(i);
-            System.out.printf("|\n|[%d m]\n|\n", currWeight.intValue());
+            System.out.printf("|\n|[%d m]\n|\n", currWeight);
             System.out.printf("* [%s] %s\n", current.getId(), current.getPrimaryName());
         }
-        System.out.printf("|\n|[%d m]\n|\n", (allWeight.get(allWeight.size() - 1)).intValue());
+        System.out.printf("|\n|[%d m]\n|\n", allWeight.getLast());
         System.out.printf("* [%s] %s\n\n", dest.getId(), dest.getPrimaryName());
-        System.out.print("End\n");
+        System.out.print("Destination<\n");
     }
 
     public int getWeight(Map<Place, Integer> weightMap, Place dest)
@@ -160,7 +160,7 @@ public class Djikstra
         }
         else
         {
-            return weight.intValue();
+            return weight;
         }
     }
 

@@ -4,8 +4,10 @@ import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
 import ModNav.ModNavExceptions.InputOutOfRangeException;
 import ModNav.ModNavExceptions.KeyAlreadyExistedException;
 import ModNav.ModNavStructure.ModNavGraph;
+import ModNav.ModNavStructure.ModNavSubject;
 import ModNav.ModNavStructure.Place;
 import ModNav.ModNavUtils.ConsoleUtils;
+import ModNav.ModNavUtils.DatabaseInstance;
 import ModNav.ModNavUtils.UserInputs;
 
 import java.util.Optional;
@@ -18,8 +20,14 @@ public class MainMenuFunctions {
         System.out.printf("Name: %s\n", p.getPrimaryName());
 
         System.out.printf("================== Options for %s ==================\n", p.getId());
-        System.out.print("[1] Get directions\t\t\t[2] Edit place info\n");
-        System.out.print("[3] Delete place\t\t\t[4] Back to main menu\n");
+        System.out.println("* Directions");
+        System.out.println("[1] Get directions");
+        System.out.print("\n");
+        System.out.println("* Edit Place Information");
+        System.out.println("[2] Edit place info");
+        System.out.println("[3] Delete place");
+        System.out.print("\n");
+        System.out.println("[4] Back to main menu");
 
         Integer opts = null;
         while (opts == null){
@@ -35,7 +43,10 @@ public class MainMenuFunctions {
                 Directions.printOutDirection(sc, g, p);
                 break;
             case 2:
-                PlaceOperations.editPlaceInfo(sc, p);
+                PlaceOperations.editPlaceInfo(sc, p, g);
+                break;
+            case 3:
+                PlaceOperations.removePlace(sc, p, g);
                 break;
             default:
                 break;
@@ -46,6 +57,8 @@ public class MainMenuFunctions {
         ConsoleUtils.clearScreen();
         System.out.println("================== Search by BID ==================");
         String id = UserInputs.getLineInput(sc, "> Input Building ID: ");
+
+        id = id.toUpperCase().trim();
 
         Optional<Place> res = g.getPlaceById(id);
 
@@ -87,26 +100,74 @@ public class MainMenuFunctions {
     public static void searchBySubject(Scanner sc, ModNavGraph g){
         ConsoleUtils.clearScreen();
         System.out.println("================== Search by Subject Name ==================");
-        String sub = "";
+        String sid = "";
 
-        while (sub.isBlank()){
-            sub = UserInputs.getLineInput(sc, "> Input Subject Name: ");
+        while (sid.isBlank()){
+            sid = UserInputs.getLineInput(sc, "> Input Subject Name: ");
 
-            if (sub.isBlank()){
+            if (sid.isBlank()){
                 System.out.println("Invalid Subject!");
             }
         }
 
-        Optional<Place> res = g.getPlaceFromSubjectID(sub);
+        sid = sid.toUpperCase().trim();
 
-        if (res.isEmpty()){
-            System.out.printf("Subject '%s' is not found in our record!\n", sub);
+        Optional<ModNavSubject> sub = g.getSubjectData(sid);
+        if (sub.isEmpty()){
+            System.out.printf("Subject '%s' was not found in our record!\n", sid);
             return;
         }
 
-        Place p = res.get();
+        String sn = sub.get().getSubjectName();
+        Place p = sub.get().getBuilding();
 
-        placeFound(sc, g, p);
+        System.out.println("\nSubject found!");
+        System.out.printf("ID: %s\n", sid);
+        System.out.printf("Name: %s\n", sn);
+        System.out.printf("Building ID: %s\n", p.getId());
+        System.out.printf("Building Name: %s\n\n", p.getPrimaryName());
+
+        System.out.printf("================== Options for %s at %s ==================\n", sid, p.getId());
+        System.out.println("* Directions");
+        System.out.println("[1] Get directions");
+        System.out.print("\n");
+        System.out.println("* Edit Subject Information");
+        System.out.printf("[2] Edit info for %s\n", sid);
+        System.out.printf("[3] Remove %s from record\n", sid);
+        System.out.print("\n");
+        System.out.printf("* Edit Place Information (%s)\n", p.getId());
+        System.out.println("[4] Edit place info");
+        System.out.println("[5] Delete place");
+        System.out.print("\n");
+        System.out.println("[6] Back to main menu");
+
+        Integer opts = null;
+        while (opts == null){
+            try {
+                opts = UserInputs.getIntegerInput(sc, 1, 6, "> Option: ");
+            }
+            catch (NumberFormatException | InputOutOfRangeException e){
+                System.out.println("Invalid Option!");
+            }
+        }
+        switch (opts){
+            case 1:
+                Directions.printOutDirection(sc, g, p);
+                break;
+            case 2:
+                SubjectOperations.editSubjectInfo(sc, sub.get(), g);
+                break;
+            case 3:
+                SubjectOperations.removeSubject(sc, sub.get(), g);
+                break;
+            case 4:
+                PlaceOperations.editPlaceInfo(sc, p, g);
+                break;
+            case 5:
+                PlaceOperations.removePlace(sc, p, g);
+            default:
+                break;
+        }
     }
 
     public static void addNewPlace(Scanner sc, ModNavGraph g){
@@ -122,6 +183,8 @@ public class MainMenuFunctions {
             }
         }
 
+        id = id.toUpperCase().trim();
+
         Place p = new Place(id);
 
         if (UserInputs.getYesNoAnswer(sc, true, "> Add place names [Y/n]: ")) {
@@ -131,11 +194,15 @@ public class MainMenuFunctions {
                 if (!name.isBlank()) {
                     p.addName(name, false);
                 }
-            } while (!name.isBlank());
+            }
+            while (!name.isBlank());
         }
 
         try {
             g.addPlace(p);
+            DatabaseInstance db = new DatabaseInstance();
+            db.savePlaceToDB(p, g);
+            db.close();
         }
         catch (KeyAlreadyExistedException e) {
             System.out.print(e.getMessage());
@@ -149,7 +216,7 @@ public class MainMenuFunctions {
         ConsoleUtils.clearScreen();
         System.out.println("================== Add new path ==================");
         String oid ;
-        Optional<Place> oo = Optional.empty();
+        Optional<Place> oo;
 
         while (true){
             oid = UserInputs.getLineInput(sc, "> Origin Building ID: ");
@@ -165,7 +232,7 @@ public class MainMenuFunctions {
         Place og = oo.get();
 
         String did;
-        Optional<Place> od = Optional.empty();
+        Optional<Place> od;
 
         while (true){
             did = UserInputs.getLineInput(sc, "> Destination Building ID: ");
@@ -181,10 +248,10 @@ public class MainMenuFunctions {
 
         Place dest = od.get();
 
-        Integer distance = null;
+        int distance;
 
         while (true){
-            distance = UserInputs.getIntegerInput(sc, 1, 10000, "> Destination Building ID: ");
+            distance = UserInputs.getIntegerInput(sc, 1, 10000, "> Distance between places: ");
 
             if (distance < 1 || distance > 10000){
                 System.out.println("Invalid distance!");
@@ -196,6 +263,10 @@ public class MainMenuFunctions {
 
         try {
             g.addPath(og, dest, distance);
+            DatabaseInstance db = new DatabaseInstance();
+            db.savePlaceToDB(og, g);
+            db.savePlaceToDB(dest, g);
+            db.close();
         }
         catch (EdgeAlreadyExistedException e){
             System.out.println(e.getMessage());
