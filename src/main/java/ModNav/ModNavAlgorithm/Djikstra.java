@@ -95,11 +95,19 @@ public class Djikstra
 
     public List<Integer> getAllWeight(List<Place> path, Map<Place, List<Path>> AdjL) //call this when user select route breakdown
     {
-        Map<Place, Path> paths = trackPath(path, AdjL);
         List<Integer> allWeight = new ArrayList<>();
-        for(Path i : paths.values())
+        for (int i = 0; i < path.size() - 1; i++) 
         {
-            allWeight.add(i.getWeight());
+            Place current = path.get(i);
+            Place next = path.get(i + 1);
+            for (Path p : AdjL.getOrDefault(current, new ArrayList<>())) 
+            {
+                if (p.getDest().equals(next)) 
+                {
+                    allWeight.add(p.getWeight());
+                    break;
+                }
+            }
         }
         return allWeight;
     }
