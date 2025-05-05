@@ -121,10 +121,16 @@ public class Djikstra
         System.out.print(result);
     }
 
-    public void pathBreakdown(Place dest){
+    public void pathBreakdown(Place dest)
+    {
         List<Place> path = getPath(dest, this.previous);
         List<Integer> allWeight = getAllWeight(path, AdjL);
         Place start = path.removeFirst();
+        if(start.equals(dest))
+        {
+            System.out.println("You're at the same place idiot.\n");
+            return;
+        }
         path.removeLast();
         System.out.println("\nPath breakdown: ");
         System.out.printf("\nStart\n\n");
