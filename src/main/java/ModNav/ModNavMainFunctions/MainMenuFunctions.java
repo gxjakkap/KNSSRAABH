@@ -14,21 +14,8 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class MainMenuFunctions {
-    public static void searchByBID(Scanner sc, ModNavGraph g){
-        ConsoleUtils.clearScreen();
-        System.out.println("================== Search by BID ==================");
-        String id = UserInputs.getLineInput(sc, "> Input Building ID: ");
-
-        Optional<Place> res = g.getPlaceById(id);
-
-        if (res.isEmpty()){
-            System.out.printf("Place with ID '%s' not found!\n", id);
-            return;
-        }
-
-        Place p = res.get();
-
-        System.out.println("Place found!");
+    public static void placeFound(Scanner sc, ModNavGraph g, Place p){
+        System.out.println("\nPlace found!");
         System.out.printf("ID: %s\n", p.getId());
         System.out.printf("Name: %s\n", p.getPrimaryName());
 
@@ -50,10 +37,28 @@ public class MainMenuFunctions {
                 Directions.printOutDirection(sc, g, p);
                 break;
             case 2:
+                PlaceOperations.editPlaceInfo(sc, p);
                 break;
             default:
                 break;
         }
+    }
+
+    public static void searchByBID(Scanner sc, ModNavGraph g){
+        ConsoleUtils.clearScreen();
+        System.out.println("================== Search by BID ==================");
+        String id = UserInputs.getLineInput(sc, "> Input Building ID: ");
+
+        Optional<Place> res = g.getPlaceById(id);
+
+        if (res.isEmpty()){
+            System.out.printf("Place with ID '%s' not found!\n", id);
+            return;
+        }
+
+        Place p = res.get();
+
+        placeFound(sc, g, p);
     }
 
     public static void searchByName(Scanner sc, ModNavGraph g){
@@ -68,6 +73,17 @@ public class MainMenuFunctions {
                 System.out.println("Invalid Name!");
             }
         }
+
+        Optional<Place> res = g.findPlaceWithName(name);
+
+        if (res.isEmpty()){
+            System.out.printf("Place '%s' not found!\n", name);
+            return;
+        }
+
+        Place p = res.get();
+
+        placeFound(sc, g, p);
     }
 
     public static void addNewPlace(Scanner sc, ModNavGraph g){
@@ -90,7 +106,7 @@ public class MainMenuFunctions {
             do {
                 name = UserInputs.getLineInput(sc, "> Name (leave blank to finish): ");
                 if (!name.isBlank()) {
-                    p.addName(name);
+                    p.addName(name, false);
                 }
             } while (!name.isBlank());
         }

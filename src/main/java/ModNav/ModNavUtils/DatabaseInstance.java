@@ -1,8 +1,12 @@
 package ModNav.ModNavUtils;
 
 import ModNav.ModNavStructure.ModNavGraph;
+import ModNav.ModNavStructure.Place;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DatabaseInstance implements AutoCloseable {
     private Connection conn = null;
@@ -51,10 +55,24 @@ public class DatabaseInstance implements AutoCloseable {
 
     public DBQueryResult loadMapFromDB(){
         DBQueryResult qRes = new DBQueryResult();
+        Map<String, Place> pm = new HashMap<>();
+
+        try (ResultSet r = this.executeQuery("SELECT id, names FROM map;")){
+            while (r.next()){
+                String id = r.getString("id");
+                List<String> names = JsonOperations.modNavNameListParse(r.getString("names"));
+                Place p = new Place(id);
+                p.setNames(names);
+                pm.put(id, p);
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         try (ResultSet r = this.executeQuery("SELECT * FROM map;")) {
             while (r.next()){
-                qRes.addRow(r.getString("id"), r.getString("paths"), r.getString("names"));
+                qRes.addRow(pm.get(r.getString("id")), r.getString("paths"), pm);
             }
         }
         catch (SQLException e) {

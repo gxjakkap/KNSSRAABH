@@ -16,13 +16,8 @@ public class DBQueryResult {
         this.placeList = new HashMap<>();
     }
 
-    public void addRow(String pId, String paths, String names){
-        Place p = new Place(pId);
-
-        List<String> nameList = JsonOperations.modNavNameListParse(names);
-        List<Path> pth = JsonOperations.modNavMapParse(paths);
-
-        p.setNames(nameList);
+    public void addRow(Place p, String paths, Map<String, Place> pm){
+        List<Path> pth = JsonOperations.modNavMapParse(paths, pm);
 
         this.map.put(p, pth);
         this.placeList.put(p.getId(), p);

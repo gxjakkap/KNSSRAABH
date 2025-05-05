@@ -27,8 +27,12 @@ public class Main {
 
         do {
             System.out.println("================== Main Menu ==================");
-            System.out.print("[1] Search with BID\t\t\t[2] Search with name\n");
-            System.out.print("[3] Add new place\t\t\t[4] Add new path\n");
+            System.out.println("* Search");
+            System.out.println("[1] Search with BID");
+            System.out.println("[2] Search with name\n");
+            System.out.println("* Add and Edit");
+            System.out.println("[3] Add new place");
+            System.out.println("[4] Add new path\n");
             System.out.print("[5] Exit\n");
 
             int opts = UserInputs.getIntegerInput(sc, 1, 5, "> Option: ");
@@ -36,9 +40,9 @@ public class Main {
             if (opts == 1) {
                 MainMenuFunctions.searchByBID(sc, g);
             }
-//            else if (opts == 2) {
-//              TODO: Search with name
-//            }
+            else if (opts == 2) {
+                MainMenuFunctions.searchByName(sc, g);
+            }
             else if (opts == 3) {
                 MainMenuFunctions.addNewPlace(sc, g);
             }
@@ -58,6 +62,7 @@ public class Main {
         db = new DatabaseInstance();
         db.saveMapToDB(g);
         db.close();
+        System.out.println("Goodbye!");
 
         System.exit(0);
     }

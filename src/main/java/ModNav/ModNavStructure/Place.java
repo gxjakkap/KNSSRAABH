@@ -2,6 +2,7 @@ package ModNav.ModNavStructure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ModNav.Structure.Node;
@@ -20,24 +21,34 @@ public class Place extends Node {
         this.names.addAll(Arrays.asList(names));
     }
 
-    @Override
-    public boolean equals(Object o) 
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    // Workaround for Gunt's mistake on parsing the place list back from DB
+    // and having different memory address so its incomparable
 
-        Place place = (Place) o;
-        return this.id.equals(place.id);
-    }
+//    @Override
+//    public boolean equals(Object o)
+//    {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        Place place = (Place) o;
+//        return this.id.equals(place.id);
+//    }
+//
+//    @Override
+//    public int hashCode()
+//    {
+//        return this.id.hashCode();
+//    }
 
-    @Override
-    public int hashCode() 
-    {
-        return this.id.hashCode();
-    }
+    // endsection
 
-    public void addName(String name){
-        this.names.add(name);
+    public void addName(String name, boolean asPrimaryName){
+        if (asPrimaryName){
+            this.names.addFirst(name);
+        }
+        else {
+            this.names.add(name);
+        }
     }
 
     public void setNames(List<String> names){
@@ -50,6 +61,10 @@ public class Place extends Node {
     }
 
     public List<String> getNames(){
-        return this.names;
+        return Collections.unmodifiableList(this.names);
+    }
+
+    public void setNewID(String newID){
+        this.id = newID;
     }
 }

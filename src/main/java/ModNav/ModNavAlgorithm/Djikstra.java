@@ -80,10 +80,14 @@ public class Djikstra
 
     public void pathBreakdown(Place dest){
         List<Place> path = getPath(dest, this.previous);
-        System.out.println("Path breakdown: ");
+        Place start = path.removeFirst();
+        path.removeLast();
+        System.out.println("\nPath breakdown: ");
+        System.out.printf("\nStart: [%s] %s\n", start.getId(), start.getPrimaryName());
         for (Place i : path){
             System.out.printf("* [%s] %s\n", i.getId(), i.getPrimaryName());
         }
+        System.out.printf("Destination: [%s] %s\n\n", dest.getId(), dest.getPrimaryName());
     }
 
     public int getWeight(Map<Place, Integer> weightMap, Place dest)
