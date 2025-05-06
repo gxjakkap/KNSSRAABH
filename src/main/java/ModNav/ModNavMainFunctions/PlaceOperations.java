@@ -44,6 +44,7 @@ public class PlaceOperations {
                 editName(sc, target, g);
                 break;
             case 3:
+                PathOperations.editPath(sc, g, target);
                 break;
             case 4:
                 addSubjectToPlace(sc, g, target);
@@ -255,7 +256,7 @@ public class PlaceOperations {
         String sn = "";
 
         while (sn.isBlank()){
-            sn = UserInputs.getLineInput(sc, "> Input Subject ID: ");
+            sn = UserInputs.getLineInput(sc, "> Input Subject Name: ");
 
             if (sn.isBlank()){
                 System.out.println("Invalid Name!");
