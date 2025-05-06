@@ -26,13 +26,14 @@ public class MainMenuFunctions {
         System.out.println("* Edit Place Information");
         System.out.println("[2] Edit place info");
         System.out.println("[3] Delete place");
+        System.out.println("[4] Edit Path");
         System.out.print("\n");
-        System.out.println("[4] Back to main menu");
+        System.out.println("[5] Back to main menu");
 
         Integer opts = null;
         while (opts == null){
             try {
-                opts = UserInputs.getIntegerInput(sc, 1, 4, "> Option: ");
+                opts = UserInputs.getIntegerInput(sc, 1, 5, "> Option: ");
             }
             catch (NumberFormatException | InputOutOfRangeException e){
                 System.out.println("Invalid Option!");
@@ -47,6 +48,9 @@ public class MainMenuFunctions {
                 break;
             case 3:
                 PlaceOperations.removePlace(sc, p, g);
+                break;
+            case 4:
+                PathOperations.editPath(sc, g, p);
                 break;
             default:
                 break;

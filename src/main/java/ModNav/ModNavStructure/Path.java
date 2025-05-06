@@ -7,6 +7,10 @@ public class Path extends Edge<Place> {
         super(dest, weight);
     }
 
+    public Path(Path op){
+        super(op.getDest(), op.getWeight());
+    }
+
     @Override
     public Place getDest(){
         return this.dest;

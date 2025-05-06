@@ -28,7 +28,7 @@ public class Graph <N extends  Node, E extends Edge<N>> extends AdjacencyList<N,
         this.nodeMap.put(n.id, n);
         this.verticesCount = this.verticesCount + 1;
     }
-
+    
     public void removeVertex(N n){
         if (!this.list.containsKey(n)){
             throw new KeyDoesNotExistException();

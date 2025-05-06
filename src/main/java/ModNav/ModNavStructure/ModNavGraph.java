@@ -29,8 +29,19 @@ public class ModNavGraph extends Graph<Place, Path> {
     }
 
     public void removePlace(Place place) {
-        super.removeVertex(place);
+        this.list.remove(place);
+        this.nodeMap.remove(place.getId());
+        for (Place origin : this.list.keySet()) {
+            List<Path> pathsToRemove = new ArrayList<>();
+            for (Path pth : this.list.get(origin)) {
+                if (pth.getDest().equals(place)) {
+                    pathsToRemove.add(pth);
+                }
+            }
+            this.list.get(origin).removeAll(pathsToRemove);
+        }
     }
+
 
     public void addPath(Place origin, Place dest, int distance) {
         if (!this.list.containsKey(origin)) {
@@ -141,5 +152,33 @@ public class ModNavGraph extends Graph<Place, Path> {
                 this.list.get(origin).remove(pth);
             }
         });
+    }
+
+    public void setNewWeight(Place origin, Path target, int newWeight){
+        Path oldO2D = new Path(target);
+        Optional<Path> oOldD2O = findPathByDestination(this.list.get(target.getDest()), origin);
+
+        if (oOldD2O.isEmpty()){
+            throw new RuntimeException();
+        }
+
+        Path oldD2O = oOldD2O.get();
+
+        Path o2d = new Path(target.getDest(), newWeight);
+        Path d2o = new Path(origin, newWeight);
+
+        this.list.get(origin).remove(target);
+        this.list.get(oldO2D.getDest()).remove(oldD2O);
+        this.list.get(origin).add(o2d);
+        this.list.get(oldO2D.getDest()).add(d2o);
+    }
+
+    public Optional<Path> findPathByDestination(List<Path> pl, Place target) {
+        for (Path path : pl) {
+            if (path.getDest() != null && path.getDest().equals(target)) {
+                return Optional.of(path);
+            }
+        }
+        return Optional.empty();
     }
 }

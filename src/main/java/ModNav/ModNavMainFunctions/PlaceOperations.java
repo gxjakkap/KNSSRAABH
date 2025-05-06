@@ -2,7 +2,9 @@ package ModNav.ModNavMainFunctions;
 
 import ModNav.ModNavAlgorithm.Traverse;
 import ModNav.ModNavExceptions.InputOutOfRangeException;
+import ModNav.ModNavExceptions.KeyDoesNotExistException;
 import ModNav.ModNavStructure.ModNavGraph;
+import ModNav.ModNavStructure.ModNavSubject;
 import ModNav.ModNavStructure.Place;
 import ModNav.ModNavUtils.DatabaseInstance;
 import ModNav.ModNavUtils.UserInputs;
@@ -18,15 +20,16 @@ public class PlaceOperations {
         System.out.printf("================== Editing %s ==================\n", target.getId());
         System.out.println("[1] Add name");
         System.out.println("[2] Edit name");
-        System.out.printf("[3] Add subject to %s\n", target.getId());
-        System.out.println("[4] Back to main menu");
+        System.out.println("[3] Edit path");
+        System.out.printf("[4] Add subject to %s\n", target.getId());
+        System.out.println("[5] Back to main menu");
         System.out.print("\n");
 
         Integer opts = null;
 
         while (opts == null){
             try {
-                opts = UserInputs.getIntegerInput(sc, 1, 4, "> Option: ");
+                opts = UserInputs.getIntegerInput(sc, 1, 5, "> Option: ");
             }
             catch (NumberFormatException | InputOutOfRangeException e){
                 System.out.println("Invalid Option!");
@@ -41,6 +44,9 @@ public class PlaceOperations {
                 editName(sc, target, g);
                 break;
             case 3:
+                break;
+            case 4:
+                addSubjectToPlace(sc, g, target);
                 break;
             default:
                 break;
@@ -168,22 +174,28 @@ public class PlaceOperations {
             return;
         }
 
-        ArrayList<Place> pl = Traverse.bfsList(g, target); // why not
+        ArrayList<Place> pl = Traverse.bfsList(g, target);
+        pl.remove(target);
 
         String pid = target.getId();
-        DatabaseInstance db = new DatabaseInstance();
-        db.removePlaceRow(target);
-        pl.forEach(p -> {
-            if (!p.equals(target)){
-                g.removePath(target, p);
+
+        try (DatabaseInstance db = new DatabaseInstance()) {
+            g.removePlace(target);
+
+            db.removePlaceRow(target);
+
+            for (Place p : pl) {
                 db.savePlaceToDB(p, g);
             }
-        });
-        db.close();
-        g.removePlace(target);
 
-        System.out.printf("Removed %s!\n", pid);
+            System.out.printf("Removed %s!\n", pid);
+        }
+        catch (KeyDoesNotExistException e) {
+            System.out.println("Error: The place you tried to remove does not exist in the graph.");
+            throw new RuntimeException(e);
+        }
     }
+
 
     private static void promoteNameToPrimary(List<String> nl, int sIdx, String bid){
         String selected = nl.get(sIdx);
@@ -227,7 +239,36 @@ public class PlaceOperations {
         System.out.printf("Removed %s from %s name list!\n", selected, bid);
     }
 
-//    private static void addSubject(Scanner sc, ModNavGraph g, Place target){
-//
-//    }
+    public static void addSubjectToPlace(Scanner sc, ModNavGraph g, Place target){
+        System.out.printf("================== Adding new subject to %s ==================\n", target.getId());
+
+        String sid = "";
+
+        while (sid.isBlank()){
+            sid = UserInputs.getLineInput(sc, "> Input Subject ID: ");
+
+            if (sid.isBlank()){
+                System.out.println("Invalid Subject ID!");
+            }
+        }
+
+        String sn = "";
+
+        while (sn.isBlank()){
+            sn = UserInputs.getLineInput(sc, "> Input Subject ID: ");
+
+            if (sn.isBlank()){
+                System.out.println("Invalid Name!");
+            }
+        }
+
+        ModNavSubject sub = new ModNavSubject(target, sn, sid);
+
+        g.addSubject(sub);
+
+        DatabaseInstance db = new DatabaseInstance();
+        db.saveSubject(sub.getSubjectID(), sub);
+        db.close();
+        System.out.printf("Added %s to %s!\n", sub.getSubjectID(), target.getId());
+    }
 }
