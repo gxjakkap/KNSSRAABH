@@ -40,6 +40,17 @@ public class ModNavGraph extends Graph<Place, Path> {
             }
             this.list.get(origin).removeAll(pathsToRemove);
         }
+
+        List<String> subjectsToRemove = new ArrayList<>();
+        this.subjectMap.forEach((sid, sub) -> {
+            if (sub.getBuilding().equals(place)){
+                subjectsToRemove.add(sid);
+            }
+        });
+
+        for (String sid : subjectsToRemove){
+            this.subjectMap.remove(sid);
+        }
     }
 
 
