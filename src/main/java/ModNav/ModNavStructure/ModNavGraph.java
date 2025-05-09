@@ -1,11 +1,16 @@
 package ModNav.ModNavStructure;
 
-import ModNav.Structure.Graph;
-import ModNav.ModNavExceptions.KeyDoesNotExistException;
-import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import ModNav.ModNavExceptions.EdgeAlreadyExistedException;
+import ModNav.ModNavExceptions.KeyDoesNotExistException;
+import ModNav.Structure.Graph;
 
 public class ModNavGraph extends Graph<Place, Path> {
     private Map<String, ModNavSubject> subjectMap;
@@ -158,11 +163,7 @@ public class ModNavGraph extends Graph<Place, Path> {
     }
 
     public void removePath(Place origin, Place dest){
-        this.list.get(origin).forEach((pth) -> {
-            if (pth.getDest().equals(dest)){
-                this.list.get(origin).remove(pth);
-            }
-        });
+        this.list.get(origin).removeIf(pth -> pth.getDest().equals(dest));
     }
 
     public void setNewWeight(Place origin, Path target, int newWeight){
